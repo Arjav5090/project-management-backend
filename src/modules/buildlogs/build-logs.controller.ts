@@ -38,11 +38,10 @@ export class BuildLogsController {
     return this.buildLogsService.findAll();
   }
 
-  /** ✅ Admin, Foreman, and Supervisor can get logs for a specific project */
   @Roles(Role.Admin, Role.Supervisor, Role.Foreman, Role.User)
-  @Get('project/:projectId')
-  async getBuildLogsByProject(@Param('projectId') projectId: string) {
-    return this.buildLogsService.findByProject(projectId);
+  @Post('multi-zone')
+  async getBuildLogsByMultipleZones(@Body() body: { zoneIds: string[] }) {
+    return this.buildLogsService.findByMultipleZones(body.zoneIds);
   }
 
   /** ✅ Fetch zones belonging to a project */
@@ -52,17 +51,18 @@ export class BuildLogsController {
     return this.buildLogsService.findZonesByProject(projectId);
   }
 
-  @Roles(Role.Admin, Role.Supervisor, Role.Foreman, Role.User)
-  @Post('multi-zone')
-  async getBuildLogsByMultipleZones(@Body() body: { zoneIds: string[] }) {
-    return this.buildLogsService.findByMultipleZones(body.zoneIds);
-  }
-
   /** ✅ Admin, Foreman, and Supervisor can get logs for a specific zone */
   @Roles(Role.Admin, Role.Supervisor, Role.Foreman, Role.User)
   @Get('zone/:zoneId')
   async getBuildLogsByZone(@Param('zoneId') zoneId: string) {
     return this.buildLogsService.findByZone(zoneId);
+  }
+
+  /** ✅ Admin, Foreman, and Supervisor can get logs for a specific project */
+  @Roles(Role.Admin, Role.Supervisor, Role.Foreman, Role.User)
+  @Get('project/:projectId')
+  async getBuildLogsByProject(@Param('projectId') projectId: string) {
+    return this.buildLogsService.findByProject(projectId);
   }
 
   /** ✅ Admin, Foreman, and Supervisor can update logs */
